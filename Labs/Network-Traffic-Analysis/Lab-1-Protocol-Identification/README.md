@@ -31,7 +31,7 @@ In my capture, all DNS traffic flowed between my laptop (192.168.1.143) and my r
 - Transaction IDs matched correctly between queries and responses
 - google.com resolved as expected with multiple IP addresses returned
 
-![DNS Filter](images/Network Traffic Analysis Lab 1.png)
+![DNS Filter](images/Network_Traffic_Analysis_Lab_1.png)
 
 ### Normal DNS — does my capture show it?
 
