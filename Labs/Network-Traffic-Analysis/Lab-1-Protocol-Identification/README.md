@@ -54,7 +54,7 @@ My machine queried `ws-v2.sparkchain.ai` and received a Server failure response 
 In isolation this is harmless, the domain simply could not be resolved at that moment.
 In a SOC context, this retry loop pattern on an unknown domain would warrant investigation.
 
-![DNS Filter](images/Network Traffic Analysis Lab 2.png)
+![DNS Filter](images/Network_Traffic_Analysis_Lab_2.png)
 
 ---
 
@@ -77,7 +77,7 @@ Unlike UDP, TCP guarantees packet delivery and ordering making it the protocol u
 | 2    | —     | SYN-ACK | Udemy's server agrees and sends its sequence number |
 | 3    | 9654  | ACK     | My laptop confirms connection established           |
 
-![TCP Handshake](images/Network Traffic Analysis Lab 3.png)
+![TCP Handshake](images/Network_Traffic_Analysis_Lab_3.png)
 
 After the handshake completed, data began flowing consistent with loading a Udemy course page or video content.
 
@@ -112,7 +112,7 @@ HTTP transfers web content between a browser and a server. Requests ask for reso
 - HTTP traffic appeared across frames 2234–10911, consistent with multiple resources loading during a browsing session
 - Packet details revealed the Host header, User-Agent, and full request path in plain text all readable without any decryption
 
-![HTTP Request](images/Network Traffic Analysis Lab 4.png)
+![HTTP Request](images/Network_Traffic_Analysis_Lab_4.png)
 
 ### Normal vs suspicious HTTP
 
