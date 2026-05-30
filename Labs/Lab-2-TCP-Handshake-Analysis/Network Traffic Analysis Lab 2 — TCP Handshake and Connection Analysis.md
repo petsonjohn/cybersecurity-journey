@@ -47,7 +47,7 @@ SYN packets across four sites
 
 Google TCP handshake SYN SYN-ACK ACK
 
-![[clean_handshake_google.png]]
+![](images/clean_handshake_google.png)
 
 | Step | Flag    | Details                                  |
 | ---- | ------- | ---------------------------------------- |
@@ -65,7 +65,7 @@ After the handshake all frames show TLS Application Data, content is encrypted a
 
 Failed connection RST response ports 23, 8080, 9999
 
-![[failed_connection_rst.png]]
+![](images/failed_connection_rst.png)
 
 All three probed ports returned RST, ACK — closed port responses from the router.
 
@@ -94,7 +94,7 @@ Windows restricts raw socket access for non kernel applications. Nmap cannot cra
 
 Nmap connect scan output
 
-![[nmap_windows_output_1.png]]
+![](images/nmap_windows_output_1.png)
 
 - **Open ports:** 53 (DNS), 80 (HTTP), 443 (HTTPS)
 - **Closed ports:** 997 — all returned RST
@@ -106,7 +106,7 @@ Nmap connect scan output
 
 Connect scan port 80 open port conversation
 
-![[windows_connect_scan_port80.png]]
+![](images/windows_connect_scan_port80.png)
 
 | Frame | Flag     | Description                       |
 | ----- | -------- | --------------------------------- |
@@ -123,7 +123,7 @@ The SYN → SYN-ACK → ACK → RST,ACK pattern is the connect scan signature fo
 
 Connect scan port 23 closed RST
 
-![[windows_connect_scan_port23_closed.png]]
+![](images/windows_connect_scan_port23_closed.png)
 
 SYN sent → RST, ACK returned immediately. No SYN-ACK. The absence of SYN-ACK is the definitive closed port indicator across all scan types.
 
@@ -131,7 +131,7 @@ SYN sent → RST, ACK returned immediately. No SYN-ACK. The absence of SYN-ACK i
 
 Conversation statistics sequential port order
 
-![[windows_conversation_statistics.png]]
+![](images/windows_conversation_statistics.png)
 
 With name resolution off, the Conversations view shows the Windows IP (Address A) hitting the router across ports (Port B) in numerical order: 1, 3, 4, 6, 7, 9, 13, 17, 19 and continuing sequentially. The volume and ordering together confirm scanning behavior without needing to read individual packets. This is one of the fastest techniques for identifying a scan in a large capture.
 
@@ -150,7 +150,7 @@ Linux grants Nmap raw socket access, allowing it to craft TCP packets directly w
 
 Nmap stealth scan output with OS detection
 
-![[nmap_kali_output.png]]
+![](images/nmap_kali_output.png)
 
 - **Open ports:** 53, 80, 443 — matching the Windows connect scan
 - **OS detected:** Linux 4.15–5.19 (router running embedded Linux, identified via -sV and -O flags)
@@ -162,7 +162,7 @@ Nmap stealth scan output with OS detection
 
 Stealth scan port 80 SYN SYN-ACK RST pattern
 
-![[kali_stealth_scan_port80.png]]
+![](images/kali_stealth_scan_port80.png)
 
 | Frame | Flag    | Description                                   |
 | ----- | ------- | --------------------------------------------- |
@@ -178,7 +178,7 @@ No ACK follows the SYN-ACK. The handshake is deliberately left incomplete. The t
 
 Stealth scan port 23 closed RST ACK
 
-![[kali_stealth_scan_port23_closed.png]]
+![](images/kali_stealth_scan_port23_closed.png)
 
 SYN sent → RST, ACK from router. Identical RST response to the connect scan for this port. The difference is no ACK follows from Kali, the half open pattern holds even for closed ports.
 
@@ -211,11 +211,11 @@ Kali's scan traffic was not visible in Windows Wireshark during live capture. Af
 
 Windows firewall disabled settings
 
-![[windows_fw_off_settings.png]]
+![](images/windows_fw_off_settings.png)
 
 Nmap Scan with Windows firewall disabled
 
-![[nmap_windows_fw_off_output.png]]
+![](images/nmap_windows_fw_off_output.png)
 
 **Nmap result:** 994 closed ports (RST), 6 open ports
 
@@ -232,7 +232,7 @@ Nmap Scan with Windows firewall disabled
 
 Firewall off port 445 open SYN SYN-ACK RST
 
-![[fw_off_port445_open.png]]
+![](images/fw_off_port445_open.png)
 
 SYN → SYN-ACK → RST — port open, Nmap aborts cleanly.
 
@@ -240,7 +240,7 @@ SYN → SYN-ACK → RST — port open, Nmap aborts cleanly.
 
 Firewall off port 444 closed RST ACK
 
-![[fw_off_port444_closed.png]]
+![](images/fw_off_port444_closed.png)
 
 SYN → RST, ACK — port closed, TCP stack responds directly.
 
@@ -250,11 +250,11 @@ With the firewall off, Windows responds honestly to every probe. A complete pict
 
 Windows firewall enabled settings
 
-![[windows_fw_on_settings.png]]
+![](images/windows_fw_on_settings.png)
 
 Nmap Scan with Windows firewall enabled
 
-![[nmap_windows_fw_on_output.png]]
+![](images/nmap_windows_fw_on_output.png)
 
 **Nmap result:** 996 filtered ports (no response), 4 open ports
 
@@ -272,7 +272,7 @@ Nmap Scan with Windows firewall enabled
 
 Firewall on port 445 still open
 
-![[fw_on_port445_open.png]]
+![](images/fw_on_port445_open.png)
 
 Behavior identical to firewall off,  Windows Firewall is configured to allow SMB traffic.
 
@@ -280,7 +280,7 @@ Behavior identical to firewall off,  Windows Firewall is configured to allow SMB
 
 Firewall on port 444 filtered no response
 
-![[fw_on_port444_filtered.png]]
+![](images/fw_on_port444_filtered.png)
 
 SYN sent → no response. Windows Firewall drops the probe before the TCP stack sees it. The same port that returned RST with the firewall off now returns silence. Closed became filtered.
 
