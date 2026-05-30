@@ -32,7 +32,7 @@ Two constraints changed the original lab design. Each one produced learning a sc
 
 SYN packets across four sites
 
-(images/handshake_multi_site_syn_filter.png)
+!(images/handshake_multi_site_syn_filter.png)
 
 | Site         | Protocol | Infrastructure        | Post-Handshake Data Visible |
 | ------------ | -------- | --------------------- | --------------------------- |
