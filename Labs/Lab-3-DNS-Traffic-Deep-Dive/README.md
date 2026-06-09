@@ -3,7 +3,9 @@
 # Phase 3 — DNS Traffic Deep Dive
 
 **Date completed:** 8th June, 2026
+
 **Tools used:** Wireshark, Iodine, Python 3
+
 **Environment:** Windows Laptop (192.168.1.143), Kali Linux VM (192.168.1.117), Home Router (192.168.1.1)
 
 **Capture files:**
