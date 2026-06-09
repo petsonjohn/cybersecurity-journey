@@ -1,4 +1,4 @@
-Network Traffic Analysis Lab 3 — DNS Traffic Deep Dive
+# Network Traffic Analysis Lab 3 — DNS Traffic Deep Dive
 
 # Phase 3 — DNS Traffic Deep Dive
 
