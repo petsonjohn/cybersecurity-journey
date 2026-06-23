@@ -1,5 +1,6 @@
 
 **Date:** 13th June, 2026
+
 **Lab Environment:** FortiGate 7.6.6 VM, GNS3 and VMware, Windows Host
 
 ---
@@ -145,11 +146,15 @@ Plan: browse to bbc.com before installing the CA certificate, expecting a SEC_ER
    - `execute ping 8.8.8.8` returned 0% packet loss with clean round trip times (28.5ms to 48.2ms, average 37.9ms)
    - `execute telnet 8.8.8.8 443` connected successfully, ruling out basic port 443 reachability as the problem
 
-**Root cause assessment:**
+**Root cause found:**
 
-Basic IP connectivity, DNS resolution, and TCP level reachability on FortiGate's WAN interface all worked fine. The failure points specifically to the TLS decrypt and reestablish step inside deep inspection, the moment FortiGate has to end the client facing session and start a new outbound TLS session to the real server. This lines up with a resource or compatibility limit of running FortiGate as a nested VM (VMware running GNS3 running FortiGate), where TLS renegotiation is more sensitive to virtualization overhead than basic ping or TCP connectivity.
+Basic ping, DNS, and TCP connectivity on FortiGate's WAN interface all worked fine. That ruled out routing and reachability as the problem. The failure was happening specifically at the TLS step inside deep inspection, the moment FortiGate has to close the connection with the browser and open a new encrypted connection to the real server.
 
-**What was not tested yet:** installing the FortiGate CA certificate before trying deep inspection again. It is possible the silent page load on the explicit proxy path happened simply because no warning trigger exists on that pipeline, and that installing the CA combined with working TLS renegotiation might resolve cleanly. This was not confirmed either way since the standard policy test failed at the TLS layer before reaching that question. This is left as an open item, not a closed finding.
+Looking into FortiGate's evaluation license settings explained why. The eval license limits FortiGate to low encryption mode only. Most modern HTTPS sites require strong encryption (TLS 1.2 or 1.3 with ciphers like AES-GCM and ECDHE) to complete a handshake. The eval license does not support these, so when FortiGate tried to open that second encrypted connection to the real server, the handshake could not finish. That produced the timeout seen in testing. This also explains why ping and basic TCP connections worked fine: those do not involve encryption at all, only the TLS specific step failed, and it failed consistently across both the proxy and firewall policy tests.
+
+This is a licensing limit, not a setup mistake, a resource problem, or an issue caused by running FortiGate inside a virtual machine. The deep inspection feature is configured correctly and would work as expected on a fully licensed FortiGate.
+
+**What was not tested:** installing the FortiGate CA certificate before trying deep inspection again. Since the low encryption limit stops the TLS handshake before it finishes, the browser never gets far enough to even check FortiGate's certificate. So CA trust was never actually the issue here. This step was still completed in Phase 8 for documentation, but there was no working deep inspection session to test it against.
 
 ---
 
@@ -165,7 +170,7 @@ Imported into Firefox: Settings > Privacy & Security > Certificates > View Certi
 
 ![Firefox CA trusted](images/lab05_firefox_ca_trusted.png)
 
-**Note:** since the warning never showed up in Phase 7, there was no before and after change to confirm this step actually fixed anything. The certificate imported successfully and shows as trusted in Firefox's Authorities list, which confirms the import itself works. Whether it would have cleared a SEC_ERROR_UNKNOWN_ISSUER warning, had one appeared, is still untested. This will be revisited if the deep inspection timeout gets resolved in a future lab.
+**Note:** since the low encryption license limit stops the TLS handshake from finishing during deep inspection, the warning in Phase 7 was never reachable in the first place, no matter the CA trust setting. The certificate still imported successfully and shows as trusted in Firefox's Authorities list, which confirms the import process itself works correctly. This step stays valid and needed for any future test on a fully licensed FortiGate, where the handshake would complete and CA trust would actually matter.
 
 ---
 
@@ -179,9 +184,9 @@ The Forward Traffic log detail panel does not show ssl-inspector, url, or app fi
 
 deep-inspection cannot be cloned on this trial VM. custom-deep-inspection, the editable profile meant for this exact purpose, was used instead. This is the correct supported approach, not a missing feature.
 
-**Limitation 3: Deep inspection TLS renegotiation failure (unresolved)**
+**Limitation 3: Deep inspection blocked by an evaluation license encryption limit (confirmed)**
 
-Deep inspection was set up correctly and confirmed active at the policy and log level, but TLS sessions to external HTTPS sites timed out during the decrypt and reestablish step, both through the explicit proxy and a standard firewall policy. Step by step testing ruled out routing issues, ECH interference, DNS failure, basic ping connectivity, and TCP/443 reachability as causes. The problem narrows down to the TLS renegotiation step inside deep inspection, likely linked to resource or compatibility limits of running FortiGate as a nested VM. This was not resolved in this lab session and is documented as an open finding, not a misconfiguration.
+Deep inspection was set up correctly and confirmed active at the policy and log level, but TLS sessions to external HTTPS sites timed out at the decrypt and reconnect step, both through the explicit proxy and a standard firewall policy. Testing one thing at a time ruled out routing, DNS, ECH, ping, and basic port 443 reachability as causes. Checking FortiGate's evaluation license settings confirmed the real cause: the eval license only supports low encryption, which cannot complete a handshake with the strong ciphers most HTTPS sites require today. This is a confirmed license limit, not an unresolved bug, a setup mistake, or a performance issue from running FortiGate as a VM.
 
 ---
 
@@ -191,9 +196,9 @@ Deep inspection was set up correctly and confirmed active at the policy and log 
 
 FortiGate reads the SNI field from the TLS handshake to identify the destination hostname. No URL path, HTTP header, or response body is visible. Web filtering under certificate inspection only works at the domain category level, good enough for blocking entire domains but not for filtering specific URLs or scanning content. The TLS session between browser and server is not touched. This mode worked correctly and was fully tested in this lab.
 
-**Finding 2: Deep inspection is built to create two separate TLS sessions, confirmed at the policy level but not fully tested end to end**
+**Finding 2: Deep inspection is built to create two separate TLS sessions, confirmed at the policy level but blocked by a license limit**
 
-With deep inspection configured, FortiGate is meant to act as the TLS endpoint for the browser, presenting its own certificate while keeping a separate session with the real server. The log showing Accept (UTM allowed) confirms FortiGate engaged this process. However, the full end to end result, including the browser actually receiving and showing FortiGate's certificate, was not observed in this lab because of the TLS renegotiation timeout described in Limitation 3.
+With deep inspection configured, FortiGate is meant to act as the TLS endpoint for the browser, presenting its own certificate while keeping a separate session with the real server. The log showing Accept (UTM allowed) confirms FortiGate engaged this process. The full result, including the browser actually showing FortiGate's certificate, was not seen in this lab because the evaluation license's low encryption limit stopped the handshake from completing, as explained in Limitation 3. This is a license boundary, not a flaw in how deep inspection works.
 
 **Finding 3: Policy level acceptance and session level completion are two different things**
 
@@ -205,7 +210,11 @@ Ruling out routing, DNS, ECH, ping, and TCP reachability one at a time, and test
 
 **Finding 5: The certificate chain is the clearest proof that deep inspection is working, when it completes**
 
-Comparing State A (real certificate authority) against a hypothetical State C (Fortinet_CA_SSL as the issuer) would be the clearest visual proof of inspection happening in the middle of the connection. This lab successfully captured State A and confirmed how the mechanism is supposed to work through the setup in Phase 5, but State C was not captured because of the unresolved timeout. This is the single most valuable screenshot to get in a follow up session.
+Comparing State A (real certificate authority) against a hypothetical State C (Fortinet_CA_SSL as the issuer) would be the clearest visual proof of inspection happening in the middle of the connection. This lab successfully captured State A and confirmed how the mechanism is supposed to work through the setup in Phase 5, but State C was not captured because the license limit in Limitation 3 stopped the handshake before it could finish. On a fully licensed FortiGate, this screenshot would be simple to get.
+
+**Finding 6: Telling apart a license limit from a setup mistake is its own analyst skill**
+
+The biggest takeaway from this lab was not the technical configuration itself, it was the process of figuring out whether something is broken because of a setup error or because of a platform restriction that has nothing to do with the configuration. Ruling out routing, DNS, ECH, and basic connectivity before looking at licensing avoided two wrong conclusions: assuming a config mistake, or assuming a vague hardware problem. In a real SOC or engineering role, correctly identifying that a security control is blocked by a license rather than misconfigured changes what happens next. One path means fixing a policy. The other means a licensing or procurement conversation.
 
 ---
 
@@ -215,12 +224,13 @@ Comparing State A (real certificate authority) against a hypothetical State C (F
 2. **Investigate unexpected certificate warnings from users** by checking the issuing certificate authority first. If it matches the organization's known FortiGate CA, the cause is likely a CA distribution gap. If it is unrecognized, that is a possible sign of unauthorized man in the middle activity.
 3. **Review SSL anomaly logs regularly**, since Log SSL Anomalies was turned on in this lab's profile and would catch blocked sessions from untrusted, expired, or invalid certificates in a working deployment.
 4. **Check TLS layer timeouts separately from policy level logs**, the central lesson from this lab, since relying only on Accept or Accept (UTM allowed) would have hidden the fact that sessions were failing after the policy already accepted them.
+5. **Check licensing and subscription status early when troubleshooting a security feature**, since this lab's root cause turned out to be an evaluation license limit, not a configuration issue. Checking license status and feature entitlements first can save a lot of troubleshooting time in both lab and production environments.
 
 ---
 
 ## Status
 
-This lab is partially complete. The certificate inspection objective was fully achieved and tested end to end, including logs. The deep inspection objective was configured correctly at every checkable layer (profile, policy assignment, log activity) but did not complete end to end due to an unresolved TLS renegotiation timeout.
+This lab is complete, with one confirmed limitation. The certificate inspection objective was fully achieved and tested end to end, including logs. The deep inspection objective was configured correctly at every checkable layer (profile, policy assignment, log activity) but could not complete end to end because of a confirmed evaluation license limit: low encryption mode only, which does not support the modern TLS ciphers needed for deep inspection's decrypt and reconnect process. This is a platform limit, not an open or unresolved technical problem.
 
 ---
 
@@ -233,6 +243,6 @@ This lab is partially complete. The certificate inspection objective was fully a
 - Forward Traffic log analysis and Security Action interpretation
 - Systematic network troubleshooting: ruling out DNS, routing, ECH, ICMP, and TCP layer issues one at a time
 - CLI based connectivity testing (ping, telnet) for root cause isolation
-- Documenting unresolved technical issues with clear root cause reasoning
+- Identifying a licensing constraint as a root cause instead of assuming a configuration error
 - Understanding the difference between policy level logging and session level completion
 - SOC relevant log analysis judgment, recognizing that Accept in logs does not always mean a successful connection
