@@ -47,7 +47,7 @@ In this lab, deep inspection was set up inside the Explicit Web Proxy rather tha
 
 Turned off the Firefox proxy temporarily (Settings > Network Settings > No Proxy). Browsed to bbc.com. Clicked the padlock, then Connection Secure, then More Information, then View Certificate.
 
-![State A real cert chain](lab04_state_a_real_cert_chain.png)
+![State A real cert chain](images/lab04_state_a_real_cert_chain.png)
 
 The certificate chain showed the real certificate authority for bbc.com, not FortiGate. This is the clean baseline both inspection modes get compared against.
 
