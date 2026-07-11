@@ -1,4 +1,3 @@
-
 **Date:** 13th June, 2026
 **Lab Environment:** FortiGate 7.6.6 VM, GNS3 and VMware, Windows Host
 
