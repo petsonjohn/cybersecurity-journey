@@ -86,7 +86,7 @@ The end result: Kali behaves exactly like a physical workstation plugged into a 
 
 Opened VirtualBox > File > Tools > Network Manager. Created a new Host-Only Ethernet Adapter and disabled the built-in DHCP server on it. Disabling DHCP was important, if DHCP was left on, it could assign IPs automatically and conflict with the static address already planned for Kali (192.168.126.50).
 
-![New VirtualBox Host-Only adapter configuration](images/lab06_virtualbox_hostonly_config.png)
+![New VirtualBox Host-Only adapter configuration](images/lab05_virtualbox_hostonly_config.png)
 
 **Step 2: Created the Windows Network Bridge**
 
@@ -96,13 +96,13 @@ Opened Windows Network Connections (ncpa.cpl). Selected both adapters at the sam
 
 Right-clicked and selected Bridge Connections. Windows created a new Network Bridge interface that combined both adapters into one Layer 2 domain.
 
-![Windows Network Bridge configuration](images/lab06_windows_bridge_config.png)
+![Windows Network Bridge configuration](images/lab05_windows_bridge_config.png)
 
 **Step 3: Verified bridge IP on the Windows host**
 
 Ran `ipconfig` in Command Prompt. The Network Bridge adapter showed up with an automatically assigned IP of 192.168.126.1, placing the Windows host on the same subnet as FortiGate's port1 and Kali's planned IP.
 
-![Host ipconfig verification](images/lab06_host_ipconfig_verify.png)
+![Host ipconfig verification](images/lab05_host_ipconfig_verify.png)
 
 ---
 
@@ -117,7 +117,7 @@ A dual adapter setup was used so Kali could switch between two network contexts 
 
 Opened Kali VM Settings > Network > Adapter 2. Changed Attached to from Disabled to Host-Only Adapter. In the Name dropdown, selected the VirtualBox Host-Only adapter created in Phase 1 (VirtualBox Host-Only Ethernet Adapter #2). Under Advanced settings, set Promiscuous Mode to Allow All so that broadcast and multicast traffic passes correctly through the software bridge.
 
-![VirtualBox Adapter 2 configuration](images/lab06_vbox_adapter2_config.png)
+![VirtualBox Adapter 2 configuration](images/lab05_vbox_adapter2_config.png)
 
 **Step 6: Configured a static IP on Adapter 2 inside Kali**
 
@@ -137,7 +137,7 @@ DNS was set to public servers (8.8.8.8) rather than the home router's DNS. This 
 
 Toggled the Fortinet Lab profile on and disabled Adapter 1 (Bridged) to make sure all lab traffic routes exclusively through Adapter 2 and FortiGate.
 
-![Kali network configuration](images/lab06_kali_gui_net_config.png)
+![Kali network configuration](images/lab05_kali_gui_net_config.png)
 
 ---
 
@@ -187,11 +187,11 @@ FortiGate GUI is now accessible from Kali at:
 
 Opened Firefox inside Kali. Tried `http://192.168.126.132:8080` first and confirmed the FortiGate Access Denied page expected behavior, not a failure.
 
-![FortiGate HTTP Access Denied page](images/lab06_http_access_denied.png)
+![FortiGate HTTP Access Denied page](images/lab05_http_access_denied.png)
 
 Switched to `https://192.168.126.132:8443`, accepted the self-signed certificate warning, and successfully loaded the FortiGate management login page from inside Kali.
 
-![FortiGate GUI loaded inside Kali](images/lab06_fortigate_gui_login.png)
+![FortiGate GUI loaded inside Kali](images/lab05_fortigate_gui_login.png)
 
 ---
 
@@ -215,7 +215,7 @@ Navigated to Policy & Objects > Firewall Policy > Create New.
 
 This is a standard firewall policy, not a proxy policy. The difference matters: standard firewall policy traffic logs to Forward Traffic with full session visibility, producing cleaner and more complete log data than the proxy policy pipeline used in Labs 03 and 05.
 
-![Kali-to-Internet firewall policy](images/lab06_fortigate_nat_policy.png)
+![Kali-to-Internet firewall policy](images/lab05_fortigate_nat_policy.png)
 
 **Step 12: Tested and validated the policy**
 
@@ -227,7 +227,7 @@ ping 8.8.8.8
 
 Confirmed successful replies. Navigated to Log & Report > Forward Traffic in the FortiGate GUI. Log entries appeared immediately, confirming Kali's traffic was being accepted, NAT-translated, and forwarded through FortiGate.
 
-![Forward Traffic log showing Kali traffic](images/lab06_forward_traffic_kali.png)
+![Forward Traffic log showing Kali traffic](images/lab05_forward_traffic_kali.png)
 
 ---
 

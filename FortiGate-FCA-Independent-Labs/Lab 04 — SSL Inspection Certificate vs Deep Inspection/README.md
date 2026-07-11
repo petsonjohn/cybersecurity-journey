@@ -47,7 +47,7 @@ In this lab, deep inspection was set up inside the Explicit Web Proxy rather tha
 
 Turned off the Firefox proxy temporarily (Settings > Network Settings > No Proxy). Browsed to bbc.com. Clicked the padlock, then Connection Secure, then More Information, then View Certificate.
 
-![State A real cert chain](lab05_state_a_real_cert_chain.png)
+![State A real cert chain](lab04_state_a_real_cert_chain.png)
 
 The certificate chain showed the real certificate authority for bbc.com, not FortiGate. This is the clean baseline both inspection modes get compared against.
 
@@ -61,7 +61,7 @@ Went to Security Profiles > SSL/SSH Inspection. FortiGate comes with four built 
 
 Opened certificate-inspection in view mode. Confirmed it only checks the TLS handshake, not the encrypted content, and that the profile cannot be edited.
 
-![Certificate inspection profile readonly](lab05_certinspect_profile_readonly.png)
+![Certificate inspection profile readonly](lab04_certinspect_profile_readonly.png)
 
 ---
 
@@ -69,7 +69,7 @@ Opened certificate-inspection in view mode. Confirmed it only checks the TLS han
 
 Went to Policy & Objects > Proxy Policy. Edited Proxy-LAN-to-WAN. Set the SSL Inspection field to certificate-inspection. Saved.
 
-![Proxy policy certificate inspection applied](lab05_proxy_policy_certinspect_applied.png)
+![Proxy policy certificate inspection applied](lab04_proxy_policy_certinspect_applied.png)
 
 ---
 
@@ -77,7 +77,7 @@ Went to Policy & Objects > Proxy Policy. Edited Proxy-LAN-to-WAN. Set the SSL In
 
 Browsed to bbc.com and instagram.com through Firefox with the proxy active. Went to Log & Report > Forward Traffic and opened the detail panel on an HTTPS log entry.
 
-![Certificate inspection log entry](lab05_log_certinspect_entry.png)
+![Certificate inspection log entry](lab04_log_certinspect_entry.png)
 
 **This worked on the first try.**
 
@@ -111,7 +111,7 @@ Configuration applied:
 | Invalid SSL Certificates | Block |
 | Log SSL Anomalies | Enable |
 
-![Custom deep inspection profile config](lab05_custom_deepinspect_profile_config.png)
+![Custom deep inspection profile config](lab04_custom_deepinspect_profile_config.png)
 
 ---
 
@@ -119,7 +119,7 @@ Configuration applied:
 
 Went to Policy & Objects > Proxy Policy. Edited Proxy-LAN-to-WAN. Changed the SSL Inspection field from certificate-inspection to custom-deep-inspection. Saved.
 
-![Proxy policy deep inspection applied](lab05_proxy_policy_deepinspect_applied.png)
+![Proxy policy deep inspection applied](lab04_proxy_policy_deepinspect_applied.png)
 
 ---
 
@@ -163,11 +163,11 @@ Even though Phase 7 never reached the warning state, the CA export step was comp
 
 Went to Security Profiles > SSL/SSH Inspections > custom-deep-inspection > edit. Found Fortinet_CA_SSL under CA Certificates. Selected and downloaded it as fortigate_ca.crt.
 
-![FortiGate CA export](lab05_fortigate_ca_export.png)
+![FortiGate CA export](lab04_fortigate_ca_export.png)
 
 Imported into Firefox: Settings > Privacy & Security > Certificates > View Certificates > Authorities tab > Import. Selected fortigate_ca.crt, checked "Trust this CA to identify websites," restarted Firefox.
 
-![Firefox CA trusted](lab05_firefox_ca_trusted.png)
+![Firefox CA trusted](lab04_firefox_ca_trusted.png)
 
 **Note:** since the low encryption license limit stops the TLS handshake from finishing during deep inspection, the warning in Phase 7 was never reachable in the first place, no matter the CA trust setting. The certificate still imported successfully and shows as trusted in Firefox's Authorities list, which confirms the import process itself works correctly. This step stays valid and needed for any future test on a fully licensed FortiGate, where the handshake would complete and CA trust would actually matter.
 
