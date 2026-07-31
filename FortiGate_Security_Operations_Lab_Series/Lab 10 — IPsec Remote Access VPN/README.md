@@ -1,6 +1,8 @@
 
 **Date:** July 30, 2026
+
 **Lab Environment:** FortiGate 7.6.6 VM | GNS3 + VMware | Kali Linux (192.168.126.50) | Windows Host
+
 **Lab Status:** Partial — IKEv2 Phase 1 handshake confirmed successful. Full tunnel completion blocked by vendor ecosystem and firmware constraints documented below.
 
 ---
