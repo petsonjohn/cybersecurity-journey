@@ -1,6 +1,9 @@
 **Date completed:** 8th August 2026
+
 **Exercise source:** malware-traffic-analysis.net, 2026-02-28 "Easy as 123"
+
 **Malware family:** NetSupport Manager RAT
+
 **PCAP file:** 2026-02-28-traffic-analysis-exercise.pcap
 
 > **Note on PCAP distribution:** The packet capture is not included in this repository. It contains real malicious traffic from a live infection and is kept out as a deliberate best practice. The exercise is publicly available at malware-traffic-analysis.net for anyone who wants to replicate this analysis.
