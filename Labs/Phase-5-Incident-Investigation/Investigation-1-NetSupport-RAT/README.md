@@ -13,8 +13,11 @@
 ## Case Brief
 
 **Alert source:** SIEM signature hits for NetSupport Manager RAT activity
+
 **Alert detail:** Traffic from internal host to 45.131.214[.]85 over TCP port 443
+
 **Activity start:** 2026-02-28 at approximately 19:55 UTC
+
 **Task:** Identify the infected host and produce a full incident report
 
 **Environment provided:**
