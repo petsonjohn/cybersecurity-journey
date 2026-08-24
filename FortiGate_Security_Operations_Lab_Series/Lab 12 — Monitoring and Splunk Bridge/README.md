@@ -1,5 +1,7 @@
 **Date:** August 20, 2026
+
 **Series:** FortiGate Security Operations Lab Series (Final Lab)
+
 **Lab Environment:** FortiGate 7.6.6 VM (GNS3/VMware Workstation) | Kali Linux | Windows Host | Splunk Enterprise Free (127.0.0.1:8000)
 
 ---
