@@ -1,4 +1,5 @@
 **Date:** July 3, 2026  
+
 **Lab Environment:** FortiGate 7.6.6 VM | GNS3 + VMware Workstation | Kali Linux (VirtualBox) | Windows Host Machine
 
 ---
