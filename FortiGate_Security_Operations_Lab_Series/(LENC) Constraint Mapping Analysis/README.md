@@ -1,4 +1,4 @@
-**Date:** August 23, 
+**Date:** August 23, 2026 
 
 **Series context:** FortiGate Security Operations Lab Series (Labs 03 to 12)
 
