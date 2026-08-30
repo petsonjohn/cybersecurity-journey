@@ -63,6 +63,6 @@ GNS3 · VMware · VirtualBox · Python · Git · Obsidian
 ## Certifications
 
 - ISC2 Certified in Cybersecurity (CC)
-- Fortinet Certified Associate in Cybersecurity (FCA), credential 6505231780OJ
+- Fortinet Certified Associate in Cybersecurity (FCA)
 - Google Cybersecurity Certificate
 - Cisco CyberOps Associate
