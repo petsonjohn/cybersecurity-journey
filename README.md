@@ -1,41 +1,68 @@
-# cybersecurity-journey
-Documenting my hands on cybersecurity learning, labs, projects and writeups
+# Cybersecurity Journey
 
-## About Me
-IT and Network Support professional currently serving at the Nigerian 
-Communications Commission (NCC). Transitioning into cybersecurity with 
-a focus on SOC Analysis and Network Security.
+Independent security investigation and lab work by Oluwadamilola Petson.
+I document everything I build, including the parts that failed and what
+caused them, because on a real SOC floor the writeup is half the job.
+
+**Currently:** Security Management at the Nigerian Communications
+Commission, Nigeria's federal telecoms regulator. Monitoring incidents in
+Microsoft Defender EDR, running phishing simulations, and supporting
+vulnerability assessments.
+
+**Looking for:** remote SOC Analyst, Network Security Analyst, or
+Cybersecurity Analyst roles from October 2026.
+
+- LinkedIn: https://linkedin.com/in/oluwadamilola-petson
+- Email: Johnpetson16@gmail.com
+- Based in Abuja, Nigeria (UTC+1). My day overlaps US overnight shifts.
+
+---
+
+## Start here
+
+Two complete series, both scoped and executed independently in a home lab.
+If you only have a few minutes, read the FormBook investigation. It is the
+sharpest single piece of analysis in the repo.
+
+### [Network Traffic Analysis and Threat Detection Engineering](./network-traffic-analysis)
+
+Five phases, from protocol baselining to three real malware
+investigations. Covers DNS tunnelling detection, C2 beaconing, TLS 1.3
+decryption, and full incident reports on NetSupport RAT, Lumma Stealer,
+and FormBook captured from real infections.
+
+### [FortiGate Security Operations](./fortigate-security-operations)
+
+Ten labs (03 to 12) plus a standalone constraint analysis, built on FortiGate
+7.6.6 across GNS3 and VMware. Firewall policy, SSL inspection, intrusion
+prevention with a confirmed Shellshock detection, VPN, and a FortiGate to
+Splunk syslog bridge. Includes the walls I hit and what actually caused
+them.
+
+---
+
+## What this repo shows
+
+- Packet-level traffic analysis across DNS, TCP, HTTP, and TLS
+- Malware traffic investigation from raw captures, with IOC extraction and
+  false-positive discipline
+- Host identification in Windows environments using DHCP, Kerberos, and
+  SAMR
+- FortiGate firewall administration: policy, NAT, SSL inspection, IPS, web
+  filtering, VPN
+- SIEM work: FortiGate syslog into Splunk, detection rebuilt in SPL,
+  dashboards
+- Honest constraint documentation: telling a licensing limit apart from a
+  misconfiguration apart from a firmware change
+
+## Tools
+
+Wireshark · Splunk · FortiGate / FortiOS · Kali Linux · Nmap · Nikto ·
+GNS3 · VMware · VirtualBox · Python · Git · Obsidian
 
 ## Certifications
+
 - ISC2 Certified in Cybersecurity (CC)
-- Cisco CyberOps Associate — Afrihub ICT Institute
-- Fortinet NSE 1, 2 & 3
-- Qualys EDR
-- Google Cybersecurity Certificate (in progress)
-
-## Home Lab Setup
-- VirtualBox + Kali Linux
-- Splunk Enterprise (Free)
-- Wireshark
-- VS Code
-- Advanced IP Scanner
-
-## Platforms
-- TryHackMe — in progress
-- LetsDefend — in progress
-- Blue Team Labs Online — in progress
-- Hack The Box — planned
-
-## Repository Structure
-- Labs/ — hands-on lab writeups and findings
-- Projects/ — cybersecurity projects and documentation
-- Notes/ — learning notes and tool summaries
-- CTF/ — capture the flag writeups
-
-## Goals
-- Land an entry-level SOC Analyst or Network Security role
-- Build a strong public portfolio of hands-on cybersecurity work
-- Contribute to the Nigerian and African cybersecurity community
-
-## Connect With Me
-- LinkedIn: linkedin.com/in/oluwadamilola-petson
+- Fortinet Certified Associate in Cybersecurity (FCA), credential 6505231780OJ
+- Google Cybersecurity Certificate
+- Cisco CyberOps Associate
