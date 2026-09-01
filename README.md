@@ -12,6 +12,7 @@ vulnerability assessments.
 **Looking for:** remote SOC Analyst, Network Security Analyst, or
 Cybersecurity Analyst roles from October 2026.
 
+- Portfolio: https://petsonjohn.vercel.app
 - LinkedIn: https://linkedin.com/in/oluwadamilola-petson
 - Email: Johnpetson16@gmail.com
 - Based in Abuja, Nigeria (UTC+1). My day overlaps US overnight shifts.
